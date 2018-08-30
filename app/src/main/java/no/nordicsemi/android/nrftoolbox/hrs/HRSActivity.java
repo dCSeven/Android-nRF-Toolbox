@@ -25,10 +25,12 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.graphics.Point;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -218,6 +220,22 @@ public class HRSActivity extends BleProfileActivity implements HRSManagerCallbac
 											   @Nullable final List<Integer> rrIntervals) {
 		mHrmValue = heartRate;
 		runOnUiThread(() -> mHRSValue.setText(getString(R.string.hrs_value, heartRate)));
+	}
+
+	@Override
+	@RequiresApi(api = Build.VERSION_CODES.KITKAT)
+	public void onDeviceConnected(final BluetoothDevice device)
+	{
+		super.onDeviceConnected(device);
+		device.createBond();
+	}
+
+	@Override
+	@RequiresApi(api = Build.VERSION_CODES.KITKAT)
+	public void onBondingRequired(final BluetoothDevice device)
+	{
+		super.onBondingRequired(device);
+		device.createBond();
 	}
 
 	@Override
